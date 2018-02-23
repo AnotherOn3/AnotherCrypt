@@ -13,18 +13,30 @@ Vue.component('Signup', Signup);
 Vue.component('Login', Login);
 Vue.component('Dashboard', Dashboard);
 
-function getUserFromDb(id) {
+// function getUserFromDb() {
+//   db
+//     .ref('users')
+//     .once('value')
+//     .then(snapshot => {
+//       var array = [];
+//       array.push(snapshot.val());
+//       console.log(Object.keys(snapshot.val())[0]);
+//     });
+// }
+// getUserFromDb();
+
+function findUsersMatchingEmail(id) {
   db
-    .ref(`users/${id}`)
-    .once('value')
-    .then(snapshot => {
-      console.log(snapshot.val());
+    .ref()
+    .child('users/')
+    .orderByChild('id')
+    .equalTo(id)
+    .once('value', function(snap) {
+      return snap.val();
     });
 }
-getUserFromDb('-L62gOcFS71aGUEipKEt');
 /* eslint-disable no-new */
 const unsubscribe = auth.onAuthStateChanged(user => {
-  console.log(user);
   new Vue({
     router,
     el: '#app',
@@ -34,7 +46,7 @@ const unsubscribe = auth.onAuthStateChanged(user => {
       user: {
         email: user.email,
         uid: user.uid,
-        capital: 10000,
+        capital: user.capital,
       },
     },
   });
@@ -42,3 +54,5 @@ const unsubscribe = auth.onAuthStateChanged(user => {
   // every time the auth state changes.
   unsubscribe();
 });
+// remove this listener so that we aren't trying to make new vue objects
+// every time the auth state changes.

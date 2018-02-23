@@ -23,20 +23,21 @@ export default {
       auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          const newKey = db
-            .ref('users/')
-            .push()
-            .key();
-          console.log(newKey);
           console.log(user);
+          console.log('blabla');
+          var myRef = db
+            .ref()
+            .child('users/')
+            .push().key;
+          console.log(myRef);
           db
             .ref('users/')
             .push({ email: user.email, id: user.uid, capital: 10000 });
           // window.location.href = '/dashboard';
+          console.log(key);
         })
         .catch(function(error) {});
     },
   },
 };
 </script>
-

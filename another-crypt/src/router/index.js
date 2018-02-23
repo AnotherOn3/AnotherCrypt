@@ -7,6 +7,19 @@ import Dashboard from '@/components/Dashboard';
 
 Vue.use(Router);
 
+const requireAuth = (to, from, next) => {
+  if (!auth.currentUser) {
+    console.log('User is not logged in');
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    });
+  } else {
+    console.log('User is logged in:', auth.currentUser.uid);
+    next();
+  }
+};
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -29,6 +42,7 @@ export default new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
+      beforeEnter: requireAuth,
     },
   ],
 });
